@@ -23,23 +23,23 @@
   "provisioners": [
     {
     "type": "shell",
-    "script": "../scripts/ansible.sh"
+    "script": "./packer/scripts/ansible.sh"
     },
 
     {
     "type": "ansible-local",
-    "playbook_file": "../../ansible/site.yml",
-    "playbook_dir": "../../ansible",
+    "playbook_file": "./ansible/site.yml",
+    "playbook_dir": "./ansible",
     "role_paths": [ 
-      "../../ansible/roles/vim",
-      "../../ansible/roles/git",
+      "./ansible/roles/vim",
+      "./ansible/roles/git",
       "/home/sunny/.ansible/roles/geerlingguy.pip",
       "/home/sunny/.ansible/roles/geerlingguy.docker"
     ],
     "extra_arguments": [
       "--verbose"
     ],
-    "group_vars": "../../ansible/group_vars"
+    "group_vars": "./ansible/group_vars"
   },
   {
     "type": "file",
