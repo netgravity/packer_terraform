@@ -1,0 +1,3 @@
+---
+- name: run command # if new plugin was installed, this is not very elegant way
+  ansible.builtin.shell: vim +PluginInstall +qall

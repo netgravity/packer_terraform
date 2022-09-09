@@ -1,0 +1,5 @@
+---
+base_packages:
+  #  - yamllint
+  - git
+    #  - "{{ vim_pkg }}"

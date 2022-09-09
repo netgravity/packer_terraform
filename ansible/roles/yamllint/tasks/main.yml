@@ -1,0 +1,19 @@
+- name: Install yamllint based on OS family
+  package:
+    name: yamllint
+    state: latest
+  become: yes
+
+- name: Ensure config dirs exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: no
+  loop:
+    - "{{ yamllint_dir }}"
+
+- name: Some config for yamllint
+  copy:
+    src: config
+    dest: "{{ yamllint_config }}"
+

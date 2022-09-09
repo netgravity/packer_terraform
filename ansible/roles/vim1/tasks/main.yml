@@ -1,0 +1,7 @@
+---
+- name: Install vim
+  apt:
+    pkg:
+     - "vim-gtk"
+    state: latest
+  become: yes

@@ -1,0 +1,6 @@
+---
+# Debian specific variables
+
+vim_pkg: vim-gtk
+  #apache_svc: httpd
+

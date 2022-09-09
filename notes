@@ -1,0 +1,80 @@
+## Build aws image with some ansible provisioning, to later use with terraform
+
+
+the below is using shared AWS credentials file to specify your credentials. The default location is $HOME/.aws/credential
+this was from chp04
+
+
+ansible-galaxy install -r requirements.yml
+packer build ubuntu.json
+
+### output
+```
+==> amazon-ebs: Deleting temporary keypair...
+Build 'amazon-ebs' finished after 18 minutes 19 seconds.
+
+==> Wait completed after 18 minutes 19 seconds
+
+==> Builds finished. The artifacts of successful builds are:
+--> amazon-ebs: AMIs were created:
+us-east-2: ami-02270b236143c268b
+
+``
+
+
+
+## Build hardened ubuntu 22_04 image
+
+ name was captured from looking at aws ami name
+
+
+```
+sunny@debby:hardening$ packer validate ubuntu.json
+The configuration is valid.
+sunny@debby:hardening$ packer build ubuntu.json
+amazon-ebs: output will be in this color.
+
+==> amazon-ebs: Prevalidating any provided VPC information
+==> amazon-ebs: Prevalidating AMI Name: hardening-base-ub_2204-1662165578
+    amazon-ebs: Found Image ID: ami-07c77145b9e19099a
+==> amazon-ebs: Creating temporary keypair: packer_6312a24a-96a1-6de6-58d4-cdb318e3235f
+==> amazon-ebs: Creating temporary security group for this instance: packer_6312a250-9d76-e0a7-8178-fbde6ff0828a
+==> amazon-ebs: Authorizing access to port 22 from [0.0.0.0/0] in the temporary security groups...
+==> amazon-ebs: Launching a source AWS instance...
+
+# in /home/sunny/Projects/packer_terraform_ansible/packer/jenkins
+run "packer build jenkins.json"
+then get the ami id and start the instance
+
+aws ec2 run-instances --instance-type t2.micro --count 1 --key-name sunny_aws --image-id ami-0403b667d2abcc58b
+
+allow inbound rules on 8080 for ur ip, aws will pick ur ip
+http://ec2-18-217-205-151.us-east-2.compute.amazonaws.com:8080/
+
+to connect ssh -i ~/Downloads/sunny_aws.pem root@ec2-18-217-205-151.us-east-2.compute.amazonaws.com
+
+Install Cloudbees AWS Credentials plugin and add global credentials by going into "manage credentials" section
+Test jenkins pipeline that worked
+```
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_sunny', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    sh '''
+                        aws ec2 describe-instances
+                        '''
+                     }
+
+            }
+        }
+    }
+}
+
+```
+create a pipeline for example to create an image  for mariadb, pipeline style project
+/home/sunny/Projects/packer_terraform_ansible/packer/mariadb -> git@github.com:netgravity/packer_ansible.git
+edit changes locally then push to git ,
+https://github.com/netgravity/packer_ansible

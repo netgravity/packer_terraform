@@ -1,0 +1,9 @@
+- name: Config Vim with plugins
+  hosts: localhost
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: Install required packages
+      package:
+        name: gitq
+        state: present

@@ -1,0 +1,3 @@
+---
+yamllint_dir: "{{ ansible_env.HOME }}/.config/yamllint"
+yamllint_config: "{{ ansible_env.HOME }}/.config/yamllint/config"

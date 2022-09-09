@@ -1,0 +1,42 @@
+- name: Config Vim with plugins
+  hosts: localhost
+  gather_facts: yes
+  become: yes
+  vars:
+    vim_dir: "{{ ansible_env.HOME }}/.vim"
+    vimrc: "{{ ansible_env.HOME }}/.vimrc"
+    yamllint_dir: "{{ ansible_env.HOME }}/.config/yamllint"
+    yamllint_config: "{{ ansible_env.HOME }}/.config/yamllint/config"
+
+
+  tasks:
+    - name: Install required packages
+      package:
+        name: "{{ item }}"
+        state: present
+      become: yes
+      with_items: "{{ base_packages }}"
+      tags:
+        - install_packages
+    - name: Ensure .vim/{autoload,bundle} directory exists
+      file:
+        path: "{{ item }}"
+        state: directory
+        recurse: no
+        mode: 0750
+      loop:
+        - "{{ vim_dir }}"
+        - "{{ yamllint_dir }}"
+
+    - name: Ensure yamllint config is created with
+      copy:
+        src: config
+        dest: "{{ yamllint_config }}"
+
+
+    - name: Ensure .vimrc config in place
+      copy:
+        src: vimrc
+        dest: "{{ vimrc }}"
+        backup: yes
+        mode: 0640

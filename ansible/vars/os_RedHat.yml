@@ -1,0 +1,7 @@
+---
+# Redhat specific variables
+
+apache_pkg: httpd
+apache_svc: httpd
+
+vim_pkg: vim-enhanced

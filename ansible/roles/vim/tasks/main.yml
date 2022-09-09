@@ -1,0 +1,30 @@
+- name: Install vim based on OS family
+  package:
+    name: "{{ vim_pkg }}"
+    state: latest
+  become: yes
+
+- name: Ensure .vim/{bundle} directory exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: no
+    mode: 0750
+  loop:
+    - "{{ vim_dir }}"
+    - "{{ vim_dir }}/bundle"
+
+- name: Clone a repo with separate git directory
+  ansible.builtin.git:
+    repo: https://github.com/VundleVim/Vundle.vim.git # https://github.com/VundleVim/Vundle.vim
+    dest: "{{ ansible_env.HOME }}/.vim/bundle/Vundle.vim"
+   # separate_git_dir: /src/ansible-examples.git
+
+- name: Ensure .vimrc config in place
+  copy:
+    src: vimrc
+    dest: "{{ vimrc }}"
+    backup: yes
+    mode: 0640
+      #  notify:
+      #- run command
