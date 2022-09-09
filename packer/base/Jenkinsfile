@@ -8,7 +8,7 @@ ansiColor('xterm') {
         }
         stage('Setup') {
            // sh "ansible-galaxy install -r requirements.yml"
-            sh 'echo "setup placeholder"'
+            sh 'ls -l ; echo "setup placeholder"'
         }
         stage('Validate') {
             sh "packer validate base_docker.json"
