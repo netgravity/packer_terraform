@@ -33,8 +33,8 @@
     "role_paths": [ 
       "./ansible/roles/vim",
       "./ansible/roles/git",
-      "/home/sunny/.ansible/roles/geerlingguy.pip",
-      "/home/sunny/.ansible/roles/geerlingguy.docker"
+      "./ansible/roles/geerlingguy.pip",
+      "./ansible/roles/geerlingguy.docker"
     ],
     "extra_arguments": [
       "--verbose"
@@ -43,7 +43,7 @@
   },
   {
     "type": "file",
-    "source": "test_infra.py",
+    "source": "./packer/base/test_infra.py",
     "destination": "/tmp/test_infra.py"
   },
   {
